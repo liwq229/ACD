@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="ACD: Direct Conditional Control for Video Diffusion Models via Attention Supervisio ">
+  <meta name="keywords" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACD: Direct Conditional Control for Video Diffusion Models via Attention Supervision</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/dressing.svg ">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <style>
+    .slider-container {
+      position: relative;
+      width: 60%;
+      /* Default slider width */
+      margin: auto;
+      overflow: hidden;
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      flex: 0 0 calc(100% / 3);
+      /* Show 3 images per row */
+      box-sizing: border-box;
+      padding: 5px;
+    }
+
+    .slide img {
+      width: 100%;
+      display: block;
+      cursor: pointer;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      pointer-events: auto;
+      font-size: 2rem;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .video-container {
+      position: relative;
+      margin: 0px auto;
+      width: 50%;
+      /* Default video width */
+      height: auto;
+      margin-bottom: 0px
+    }
+
+    .video-container video {
+      width: 100%;
+      /* aspect-ratio: 3 / 2; */
+      /* Maintain consistent aspect ratio */
+      border: none;
+      /* Remove any default borders */
+      transition: opacity 0.5s ease-in-out;
+      margin-bottom: 0px
+    }
+
+    .video {
+      height: 100%;
+      width: 100%;
+      /* Ensure videos take full width of the column */
+      margin-bottom: 0px
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title"><span style="
+              font-weight: bold;
+                background: linear-gradient(107deg, orange, yellow, green, blue);
+              -webkit-background-clip: text;
+              color: transparent;
+            ">
+                ACD
+              </span>
+              : Direct Conditional Control for Video Diffusion Models via Attention Supervision</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </section>
+
+
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <img src="static/images/teaser.png" alt="" class="wide-image" />
+
+        <h2 class="content has-text-justified">
+          <p>
+            <b><i>ACD </i></b> enables accurate and interpretable video synthesis by conditioning diffusion models on
+            sparse, 3D-aware object layouts and attention supervision.
+          </p>
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <section class="section hero is-light">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-2" style="font-family: Comic Sans MS; 
+              font-weight: bold; 
+              background: linear-gradient(107deg, orange, yellow, green, blue); 
+              -webkit-background-clip: text; 
+              color: transparent;">
+            Abstract
+          </h2>
+          <div class="content has-text-justified">
+            <p>
+              Controllable generation is critical for the practical deployment of diffusion-based generative models,
+              particularly in video synthesis where alignment with conditioning signals is essential. Existing
+              approaches typically rely on indirect conditioning by learning the joint distribution \( p(x, c) \), where
+              \( x \) is the generated sample and \( c \) is the conditioning input. However, such data-driven
+              strategies offer limited enforcement of conditioning semantics and often fail to guarantee that generated
+              content reflects the intended guidance. Classifier-based guidance enforces stronger conditioning but is
+              prone to adversarial artifacts, while classifier-free guidance offers empirical effectiveness with less
+              interpretability or control precision. In this paper, we propose <i>Attention-Conditional Diffusion
+                (ACD)</i>, a novel framework for direct conditional control in video diffusion models via attention
+              supervision. By aligning the model’s attention maps with external control signals, ACD achieves
+              semantically grounded and precise generation. To support this, we introduce a sparse 3D-aware object
+              layout as an efficient and interpretable conditioning signal, along with a dedicated Layout ControlNet and
+              an automated annotation pipeline for scalable layout integration. Extensive experiments on benchmark video
+              generation datasets demonstrate that ACD delivers superior alignment with conditioning inputs while
+              preserving temporal coherence and visual fidelity, establishing a robust and interpretable paradigm for
+              conditional video synthesis.
+            </p>
+          </div>
+        </div>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section class="section hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-">
+            <h2 class="title is-2" style="font-family: Comic Sans MS; 
+              font-weight: bold; 
+              background: linear-gradient(107deg, orange, yellow, green, blue); 
+              -webkit-background-clip: text; 
+              color: transparent;">
+              Method
+            </h2>
+            <div class="columns is-centered has-text-justified">
+              <td colspan="3">
+                <img src="static/images/overview.png" alt="" width="1600" />
+              </td>
+            </div>
+            <div class="content has-text-justified">
+              Overview of our Attention-Conditional Diffusion (ACD) framework. The input video and its masked version
+              are encoded into visual tokens, while the sparse 3D-aware object layout is converted into layout tokens.
+              These tokens pass through stacked Attention-Conditional DiT blocks, where a router constraint supervises
+              attention maps between masked and unmasked video tokens. Gradients from this constraint update the model
+              parameters. A VAE decoder then reconstructs the video, enabling ACD to generate outputs that closely
+              follow the given layouts and camera trajectories.
+            </div>
+          </div>
+  </section>
+
+  <section class="section hero is-small">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+          <div class="column custom-width">
+            <h2 class="title is-2" style="font-family: Comic Sans MS; 
+              font-weight: bold; 
+              background: linear-gradient(107deg, orange, yellow, green, blue); 
+              -webkit-background-clip: text; 
+              color: transparent;">Comparisons with sota Methods</h2>
+            <div class="content has-text-centered">
+              <td colspan="3">
+                <img src="static/images/compare.png" alt="" width="2160" />
+                <p>
+                  <b>Qualitative comparisons</b> with state-of-the-art methods.
+                </p>
+              </td>
+            </div>
+          </div>
+        </div>
+  </section>
+
+  <section style="margin-top: 1rem; padding-top: 0; padding-bottom: 0;">
+    <h2 class="title is-2" style="font-family: Comic Sans MS; 
+          font-weight: bold; 
+          background: linear-gradient(107deg, orange, yellow, green, blue); 
+          -webkit-background-clip: text; 
+          color: transparent; text-align: center;">More Video Results</h2>
+
+    <p style="font-size: smaller; text-align: center; margin-top: 1rem; margin-bottom: 1rem;">Given
+      a single reference image and a sparse object layout with an associated camera trajectory, ACD generates
+      videos that faithfully
+      preserve structural semantics and exhibit precise camera motion.</p>
+
+    <div class="video-container" id="videoContainer">
+      <video id="video" autoplay loop muted>
+        <source src="" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="slider-container" id="sliderContainer">
+      <div id="slider" class="slider">
+        <!-- Slides will be generated dynamically -->
+      </div>
+      <div class="navigation">
+        <button id="prev" class="nav-btn">❮</button>
+        <button id="next" class="nav-btn">❯</button>
+      </div>
+    </div>
+
+    <script>
+      const slider = document.getElementById("slider");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      const video = document.getElementById("video");
+
+      let currentIndex = 1;
+      const imagesPerRow = 3;
+
+      const videoData = [
+        {
+          "video": "./video/short/00001_out_reference.mp4",
+          "thumbnail": "./video/short/00001_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00012_out_reference.mp4",
+          "thumbnail": "./video/short/00012_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00009_out_reference.mp4",
+          "thumbnail": "./video/short/00009_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00014_out_reference.mp4",
+          "thumbnail": "./video/short/00014_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00025_out_reference.mp4",
+          "thumbnail": "./video/short/00025_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00026_out_reference.mp4",
+          "thumbnail": "./video/short/00026_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00028_out_reference.mp4",
+          "thumbnail": "./video/short/00028_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00102_out_reference.mp4",
+          "thumbnail": "./video/short/00102_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00122_out_reference.mp4",
+          "thumbnail": "./video/short/00122_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00187_out_reference.mp4",
+          "thumbnail": "./video/short/00187_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/00881_out_reference.mp4",
+          "thumbnail": "./video/short/00881_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01003_out_reference.mp4",
+          "thumbnail": "./video/short/01003_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01185_out_reference.mp4",
+          "thumbnail": "./video/short/01185_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01378_out_reference.mp4",
+          "thumbnail": "./video/short/01378_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01470_out_reference.mp4",
+          "thumbnail": "./video/short/01470_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01550_out_reference.mp4",
+          "thumbnail": "./video/short/01550_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01728_out_reference.mp4",
+          "thumbnail": "./video/short/01728_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01731_out_reference.mp4",
+          "thumbnail": "./video/short/01731_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/01881_out_reference.mp4",
+          "thumbnail": "./video/short/01881_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/02232_out_reference.mp4",
+          "thumbnail": "./video/short/02232_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/short/02364_out_reference.mp4",
+          "thumbnail": "./video/short/02364_out_reference_first_frame.jpg"
+        }
+      ]
+
+      // 动态生成 slide DOM
+      videoData.forEach((item, index) => {
+        const slide = document.createElement("div");
+        slide.classList.add("slide");
+
+        const img = document.createElement("img");
+        img.src = item.thumbnail;
+        img.alt = `Image ${index + 1}`;
+        img.onclick = () => changeVideo(index);
+
+        slide.appendChild(img);
+        slider.appendChild(slide);
+      });
+
+      function updateSlider() {
+        // 让当前图在中间位置（第二个位置）
+        let offset = (currentIndex - 1) * (100 / imagesPerRow);
+
+        // 边界控制：不允许滑动过头（防止空白区域）
+        // 最小偏移0，最大偏移不超过总宽度减去一屏宽度
+        if (offset < 0) offset = 0;
+        const maxOffset = (videoData.length - imagesPerRow) * (100 / imagesPerRow);
+        if (offset > maxOffset) offset = maxOffset;
+
+        slider.style.transform = `translateX(-${offset}%)`;
+      }
+
+
+      function changeVideo(index) {
+        currentIndex = index;
+        video.src = videoData[currentIndex].video;
+        video.load();
+        video.play();
+        updateSlider();
+      }
+
+      function changeVideoPre() {
+        currentIndex = (currentIndex - 1 + videoData.length) % videoData.length;
+        changeVideo(currentIndex);
+      }
+
+      function changeVideoNext() {
+        currentIndex = (currentIndex + 1) % videoData.length;
+        changeVideo(currentIndex);
+      }
+
+      prevBtn.addEventListener("click", changeVideoPre);
+      nextBtn.addEventListener("click", changeVideoNext);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        changeVideo(currentIndex);
+      });
+    </script>
+  </section>
+
+
+
+  <section style="margin-top: 1%">
+    <h2 class="title is-2" style="font-family: Comic Sans MS; 
+          font-weight: bold; 
+          background: linear-gradient(107deg, orange, yellow, green, blue); 
+          -webkit-background-clip: text; 
+          color: transparent; text-align: center;">Long Camera Trajectories</h2>
+
+    <div class="video-container" id="videoContainer">
+      <video id="videoLong" autoplay loop muted>
+        <source src="" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="slider-container" id="sliderContainer">
+      <div id="sliderLong" class="slider">
+        <!-- Slides will be generated dynamically -->
+      </div>
+      <div class="navigation">
+        <button id="prevLong" class="nav-btn">❮</button>
+        <button id="nextLong" class="nav-btn">❯</button>
+      </div>
+    </div>
+
+    <script>
+      const sliderLong = document.getElementById("sliderLong");
+      const prevBtnLong = document.getElementById("prevLong");
+      const nextBtnLong = document.getElementById("nextLong");
+      const videoLong = document.getElementById("videoLong");
+
+      let currentIndexLong = 1;
+      const imagesPerRowLong = 3;
+
+      const videoDataLong = [
+        {
+          "video": "./video/long/00000_out_reference.mp4",
+          "thumbnail": "./video/long/00000_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00005_out_reference.mp4",
+          "thumbnail": "./video/long/00005_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00004_out_reference.mp4",
+          "thumbnail": "./video/long/00004_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00006_out_reference.mp4",
+          "thumbnail": "./video/long/00006_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00016_out_reference.mp4",
+          "thumbnail": "./video/long/00016_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00396_out_reference.mp4",
+          "thumbnail": "./video/long/00396_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00456_out_reference.mp4",
+          "thumbnail": "./video/long/00456_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00653_out_reference.mp4",
+          "thumbnail": "./video/long/00653_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/00933_out_reference.mp4",
+          "thumbnail": "./video/long/00933_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/01139_out_reference.mp4",
+          "thumbnail": "./video/long/01139_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/02298_out_reference.mp4",
+          "thumbnail": "./video/long/02298_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/02418_out_reference.mp4",
+          "thumbnail": "./video/long/02418_out_reference_first_frame.jpg"
+        },
+        {
+          "video": "./video/long/02708_out_reference.mp4",
+          "thumbnail": "./video/long/02708_out_reference_first_frame.jpg"
+        }
+      ]
+
+      // 动态生成 slide DOM
+      videoDataLong.forEach((item, index) => {
+        const slide = document.createElement("div");
+        slide.classList.add("slide");
+
+        const img = document.createElement("img");
+        img.src = item.thumbnail;
+        img.alt = `Image ${index + 1}`;
+        img.onclick = () => changeVideoLong(index);
+
+        slide.appendChild(img);
+        sliderLong.appendChild(slide);
+      });
+
+      function updateSliderLong() {
+        // 让当前图在中间位置（第二个位置）
+        let offset = (currentIndexLong - 1) * (100 / imagesPerRowLong);
+
+        // 边界控制：不允许滑动过头（防止空白区域）
+        // 最小偏移0，最大偏移不超过总宽度减去一屏宽度
+        if (offset < 0) offset = 0;
+        const maxOffset = (videoDataLong.length - imagesPerRowLong) * (100 / imagesPerRowLong);
+        if (offset > maxOffset) offset = maxOffset;
+
+        sliderLong.style.transform = `translateX(-${offset}%)`;
+      }
+
+
+      function changeVideoLong(index) {
+        currentIndexLong = index;
+        videoLong.src = videoDataLong[currentIndexLong].video;
+        videoLong.load();
+        videoLong.play();
+        updateSliderLong();
+      }
+
+      function changeVideoLongPre() {
+        currentIndexLong = (currentIndexLong - 1 + videoDataLong.length) % videoDataLong.length;
+        changeVideoLong(currentIndexLong);
+      }
+
+      function changeVideoLongNext() {
+        currentIndexLong = (currentIndexLong + 1) % videoDataLong.length;
+        changeVideoLong(currentIndexLong);
+      }
+
+      prevBtnLong.addEventListener("click", changeVideoLongPre);
+      nextBtnLong.addEventListener("click", changeVideoLongNext);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        changeVideoLong(currentIndexLong);
+      });
+    </script>
+  </section>
+
+</body>
+
+</html>
